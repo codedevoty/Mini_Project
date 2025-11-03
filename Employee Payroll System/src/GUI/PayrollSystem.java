@@ -15,6 +15,7 @@ public class PayrollSystem extends JFrame {
     private SalarySlipGenerator slipGen = new SalarySlipGenerator();
     private SearchService searchService = new SearchService();
     private UpdateService updateService = new UpdateService();
+    private RemoveService removeService = new RemoveService();
 
     private JTable employeesTable;
     private DefaultTableModel tableModel;
@@ -39,12 +40,14 @@ public class PayrollSystem extends JFrame {
         JButton btnAddPT = new JButton("Add Part-Time");
         JButton btnSearch = new JButton("Search");
         JButton btnUpdate = new JButton("Update");
+        JButton btnRemove = new JButton("Remove");
         JButton btnGenerate = new JButton("Generate Slip");
         JButton btnRefresh = new JButton("Refresh List");
         top.add(btnAddFT);
         top.add(btnAddPT);
         top.add(btnSearch);
         top.add(btnUpdate);
+        top.add(btnRemove);
         top.add(btnGenerate);
         top.add(btnRefresh);
 
@@ -61,6 +64,7 @@ public class PayrollSystem extends JFrame {
         btnAddPT.addActionListener(e -> showAddPartTimeDialog());
         btnSearch.addActionListener(e -> showSearchDialog());
         btnUpdate.addActionListener(e -> showUpdateDialog());
+        btnRemove.addActionListener(e -> showRemoveDialog());
         btnGenerate.addActionListener(e -> showGenerateSlipDialog());
         btnRefresh.addActionListener(e -> loadAllEmployees());
     }
@@ -297,6 +301,25 @@ public class PayrollSystem extends JFrame {
         }
     }
 
+    private void showRemoveDialog() {
+        String name = JOptionPane.showInputDialog(this, "Enter Employee Name to Remove:");
+        if (name == null || name.trim().isEmpty()) return;
+
+        try {
+            boolean removed = removeService.removeEmployeeByName(name.trim());
+            if (removed) {
+                JOptionPane.showMessageDialog(this, " Employee '" + name + "' removed successfully.");
+                loadAllEmployees();
+            } else {
+                JOptionPane.showMessageDialog(this, " No employee found with the name '" + name + "'.");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error removing employee: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+
     private void showGenerateSlipDialog() {
         String idStr = JOptionPane.showInputDialog(this, "Employee ID:");
         if (idStr == null) return;
@@ -322,6 +345,12 @@ public class PayrollSystem extends JFrame {
     }
 
     public static void main(String[] args) {
+
+        System.out.println("\n\n==============================");
+        System.out.println("  EMPLOYEE MANAGEMENT SYSTEM  ");
+        System.out.println("==============================");
+        System.out.println("  Project Started Successfully!");
+
         SwingUtilities.invokeLater(() -> {
             new PayrollSystem().setVisible(true);
         });
