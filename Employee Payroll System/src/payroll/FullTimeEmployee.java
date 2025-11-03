@@ -12,7 +12,7 @@ public class FullTimeEmployee extends Employee {
         this.monthlySalary = monthlySalary;
     }
 
-    // getters & setters
+    // Getters & Setters
     public double getMonthlySalary() { return monthlySalary; }
     public void setMonthlySalary(double monthlySalary) { this.monthlySalary = monthlySalary; }
 
@@ -30,8 +30,15 @@ public class FullTimeEmployee extends Employee {
 
     @Override
     public double calculateSalary() {
-        // gross salary = base + hra + da + bonus
-        double gross = monthlySalary + hra + da + bonus;
-        return gross;
+        // Gross salary = base + hra + da + bonus
+        double grossSalary = monthlySalary + hra + da + bonus;
+
+        // PF amount = (pfPercentage / 100) * monthlySalary
+        double pfAmount = (pfPercentage / 100) * monthlySalary;
+
+        // Net salary = gross - PF
+        double netSalary = grossSalary - pfAmount;
+
+        return netSalary;
     }
 }
