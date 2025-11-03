@@ -173,6 +173,16 @@ public class EmployeeDAO {
         return results;
     }
 
+    public boolean removeEmployeeByName(String name) throws SQLException {
+        String sql = "DELETE FROM employees WHERE name = ?";
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, name);
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        }
+    }
+
     public List<Employee> listAll() throws SQLException {
         String sql = "SELECT id FROM employees";
         List<Employee> list = new ArrayList<>();
